@@ -10,12 +10,15 @@ class PodioClient
   attr_accessor :connection
   attr_accessor :space
 
-  def initialize(space, email, password)
+  def initialize(email, password, space = nil)
     podio = Podio::Client.new
     podio.get_access_token(email, password)
 
     self.space = space
     self.connection = podio.connection
+  end
+
+  def spaces
   end
 
   def tasks
