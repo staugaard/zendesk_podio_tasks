@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/podio/podio-rb.git
+  revision: 6bb086d7452f07d7de4a431d54882e5ca0df0f41
+  ref: 6bb086d7452f07d7de
+  specs:
+    podio (0.2.1)
+      activesupport (~> 3.0)
+      faraday (~> 0.5.1)
+      multi_json (~> 0.0.5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -35,10 +45,6 @@ GEM
     multi_json (0.0.5)
     multipart-post (1.1.0)
     newrelic_rpm (2.13.4)
-    podio (0.2.1)
-      activesupport (~> 3.0)
-      faraday (~> 0.5.1)
-      multi_json (~> 0.0.5)
     rack (1.2.2)
     sinatra (1.2.1)
       rack (~> 1.1)
@@ -63,7 +69,7 @@ DEPENDENCIES
   i18n
   json
   newrelic_rpm
-  podio
+  podio!
   sinatra
   thin
   yajl-ruby

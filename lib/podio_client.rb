@@ -9,19 +9,23 @@ end
 class PodioClient
   attr_accessor :connection
   attr_accessor :space
+  attr_accessor :client
 
   def initialize(email, password, space = nil)
-    podio = Podio::Client.new
-    podio.get_access_token(email, password)
+    client = Podio::Client.new
+    client.get_access_token(email, password)
 
-    self.space = space
-    self.connection = podio.connection
+    Podio.client = client
+
+    self.space  = space
+    self.client = client
   end
 
   def spaces
     found_spaces = []
-    connection.get("/org/").body.each do |part|
-      (part["spaces"] || []).each do |part_space|
+    orgs = Podio::Organization.find_all
+    orgs.each do |org|
+      (org["spaces"] || []).each do |part_space|
         found_spaces << part_space["space_id"]
       end
     end
@@ -29,18 +33,11 @@ class PodioClient
   end
 
   def tasks(s = space)
-    connection.get("/task/?space=#{s}").body
+    client.connection.get("/task/?space=#{s}").body
   end
 
   def update_task(task_id, comment)
-    connection.put do |request|
-      request.url "/task/#{task_id}/description"
-      request.headers["Content-Type"] = "application/json"
-      request.headers["Accept"]       = "application/json"
-      request.body = {
-        :description => comment
-      }
-    end
+    Podio::Task.update_description(task_id, comment)
   end
 end
 
