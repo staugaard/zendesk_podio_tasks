@@ -11,22 +11,28 @@ class ZendeskClient
   attr_accessor :connection
 
   def initialize(account, email, password, ssl = true)
-    self.connection = Faraday.new("http#{"s" if ssl}://#{account}.zendesk.com/")
+    self.connection = Faraday.new("http#{"s" if ssl}://#{account}.zendesk.com/") do |builder|
+      builder.use Faraday::Request::Yajl
+      builder.use Faraday::Adapter::Logger
+      builder.adapter Faraday.default_adapter
+      builder.use Faraday::Response::Yajl
+    end
     self.connection.basic_auth(email, password)
   end
 
   def user(id)
-    JSON.parse(connection.get("/users/#{id}.json").body)
+    connection.get("/users/#{id}.json").body
   end
 
   def create(requester, due_date, description)
     connection.post do |request|
-      request.url = "/ticket.json"
+      request.url "/tickets.json"
       request.headers["Content-Type"] = "application/json"
+      request.headers["Accept"]       = "application/json"
       request.body = {
         :ticket => {
-          :type => 4,
-          :description     => descroption,
+          :ticket_type_id  => 4,
+          :description     => description,
           :requester_email => requester
         }
       }
@@ -40,7 +46,7 @@ class ZendeskClient
       if response.status != 200
         raise "Invalid response: #{response.inspect}"
       else
-        tasks << Task.new(self, JSON.parse(response.body))
+        tasks << Task.new(self, response.body)
       end
     end
     tasks

@@ -48,6 +48,7 @@ GEM
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
     tilt (1.2.2)
+    yajl-ruby (0.7.6)
 
 PLATFORMS
   ruby
@@ -65,3 +66,4 @@ DEPENDENCIES
   podio
   sinatra
   thin
+  yajl-ruby

@@ -9,6 +9,7 @@ gem 'dm-core'
 gem 'dm-validations'
 gem 'dm-migrations'
 gem 'i18n'
+gem 'yajl-ruby'
 
 group :development do
   gem 'thin'
