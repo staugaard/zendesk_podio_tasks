@@ -2,7 +2,10 @@ require 'json'
 
 # client = ZendeskClient.new("example", "hello@example.com", "123456")
 # tasks = client.tasks(... task ids ...)
-# tasks.first.comments
+# tasks.first.comments.each do |comment|
+#   comment.author
+#   comment.value
+# end
 class ZendeskClient
 
   attr_accessor :connection
@@ -12,6 +15,10 @@ class ZendeskClient
     self.connection.basic_auth(email, password)
   end
 
+  def user(id)
+    JSON.parse(connection.get("/users/#{id}.json").body)
+  end
+
   def tasks(*task_ids)
     tasks = []
     task_ids.each do |task_id|
@@ -19,22 +26,45 @@ class ZendeskClient
       if response.status != 200
         raise "Invalid response: #{response.inspect}"
       else
-        tasks << Task.new(response.body)
+        tasks << Task.new(self, JSON.parse(response.body))
       end
     end
     tasks
   end
 
   class Task
-    attr_accessor :data
+    attr_accessor :json
+    attr_accessor :client
 
-    def initialize(data)
-      self.data = JSON.parse(data)
+    def initialize(client, json)
+      self.client = client
+      self.json   = json
+    end
+
+    def id
+      json["nice_id"]
+    end
+
+    def value
+      json["value"]
     end
 
     def comments
-      data["comments"]
+      @comments ||= begin
+        resolved = []
+        json["comments"].each do |comment|
+          author = client.user(comment["author_id"])["name"]
+          resolved << Comment.new(author, comment["created_at"], comment["value"])
+        end
+        resolved
+      end
+    end
+
+    def to_s
+      "Task #{id}"
     end
   end
 
+  class Comment < Struct.new(:author, :created_at, :value)
+  end
 end
