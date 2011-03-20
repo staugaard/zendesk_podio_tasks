@@ -1,0 +1,6 @@
+== Task Sync
+
+Polls Podio for tasks for a given user. Ignores already registered tasks. Turns new tasks into Zendesk tickets.
+
+Scans non closed (registered) tickets in Zendesk. Updates the Podio task with new comments.
+
