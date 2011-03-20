@@ -8,6 +8,7 @@ gem 'podio'
 gem 'dm-core'
 gem 'dm-validations'
 gem 'dm-migrations'
+gem 'i18n'
 
 group :development do
   gem 'thin'
