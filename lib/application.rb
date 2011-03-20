@@ -24,7 +24,15 @@ post('/links.json') do
   content_type :json
 
   document = JSON.parse(request.body.read)
-  new_link = SpaceLinking.new(document)
+  new_link = SpaceLinking.new(
+    :podio_space_id      => document[:podio_space_id],
+    :podio_user_email    => document[:podio_space_id],
+    :podio_user_password => document[:podio_space_id],
+
+    :zendesk_subdomain     => document[:podio_space_id],
+    :zendesk_user_email    => document[:podio_space_id],
+    :zendesk_user_password => document[:podio_space_id]
+  )
   if new_link.save
     "{status: 'OK'}"
   else
