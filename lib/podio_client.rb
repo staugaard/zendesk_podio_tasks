@@ -19,10 +19,17 @@ class PodioClient
   end
 
   def spaces
+    found_spaces = []
+    connection.get("/org/").body.each do |part|
+      (part["spaces"] || []).each do |part_space|
+        found_spaces << part_space["space_id"]
+      end
+    end
+    found_spaces
   end
 
-  def tasks
-    connection.get("/task/?space=#{space}")
+  def tasks(s = space)
+    connection.get("/task/?space=#{s}").body
   end
 
   def update_task(task_id, comment)
