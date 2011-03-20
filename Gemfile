@@ -12,3 +12,7 @@ group :development do
   gem 'thin'
   gem 'dm-sqlite-adapter'
 end
+
+group :production do
+  gem 'dm-postgres-adapter'
+end
