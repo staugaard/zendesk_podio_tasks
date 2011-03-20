@@ -28,7 +28,7 @@ class PodioClient
       request.headers["Content-Type"] = "application/json"
       request.headers["Accept"]       = "application/json"
       request.body = {
-        :description => { comment }
+        :description => comment
       }
     end
   end
