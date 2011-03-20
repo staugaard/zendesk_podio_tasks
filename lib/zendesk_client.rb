@@ -19,6 +19,20 @@ class ZendeskClient
     JSON.parse(connection.get("/users/#{id}.json").body)
   end
 
+  def create(requester, due_date, description)
+    connection.post do |request|
+      request.url = "/ticket.json"
+      request.headers["Content-Type"] = "application/json"
+      request.body = {
+        :ticket => {
+          :type => 4,
+          :description     => descroption,
+          :requester_email => requester
+        }
+      }
+    end
+  end
+
   def tasks(*task_ids)
     tasks = []
     task_ids.each do |task_id|
