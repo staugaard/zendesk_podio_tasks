@@ -25,7 +25,7 @@ class ZendeskClient
   end
 
   def create(requester, due_date, description)
-    connection.post do |request|
+    response = connection.post do |request|
       request.url "/tickets.json"
       request.headers["Content-Type"] = "application/json"
       request.headers["Accept"]       = "application/json"
@@ -37,6 +37,7 @@ class ZendeskClient
         }
       }
     end
+    response.headers['location'].match(/.+?(\d+)\.json/)[1]
   end
 
   def tasks(*task_ids)
