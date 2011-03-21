@@ -37,7 +37,7 @@ class PodioClient
   end
 
   def update_task(task_id, comment)
-    Podio::Task.update_description(task_id, comment)
+    Podio::Comment.create("task", task_id, :value => comment)
   end
 end
 
