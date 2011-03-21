@@ -75,7 +75,7 @@ class ZendeskClient
         resolved = []
         json["comments"].each do |comment|
           author = client.user(comment["author_id"])["name"]
-          resolved << Comment.new(author, comment["created_at"], comment["value"])
+          resolved << Comment.new(author, Time.parse(comment["created_at"]), comment["value"])
         end
         resolved
       end
