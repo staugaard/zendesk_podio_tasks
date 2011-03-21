@@ -6,6 +6,7 @@ class TaskTicketMapping
 
   property :id, Serial
   property :podio_task_id, Integer
+  property :zendesk_subdomain, String
   property :zendesk_ticket_id, Integer
   property :updated_at, DateTime
 end
